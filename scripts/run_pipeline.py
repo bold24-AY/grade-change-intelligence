@@ -77,9 +77,11 @@ def run_end_to_end_pipeline():
     
     # 5. Feature Normalization and Label Encoding
     logger.info("Normalizing features and encoding grade labels...")
-    # Gather engineered numeric columns
-    numeric_cols = [col for col in featured_df.columns if col not in ["timestamp", "active_grade_id"]]
+    # Gather engineered numeric columns to scale (exclude labels and targets)
+    exclude_cols = ["timestamp", "active_grade_id", "basis_weight_gsm", "basis_weight_dev", "is_basis_weight_off_spec"]
+    numeric_cols = [col for col in featured_df.columns if col not in exclude_cols]
     processor = DataProcessor(numeric_cols=numeric_cols, categorical_cols=["active_grade_id"])
+
     
     # Fit stats and scale
     processor.fit_standardize(featured_df)

@@ -13,6 +13,9 @@ class DataValidator:
         "consistency_pct", 
         "steam_pressure_bar", 
         "machine_speed_mpm", 
+        "basis_weight_gsm",
+        "basis_weight_dev",
+        "is_basis_weight_off_spec",
         "active_grade_id"
     ]
     
@@ -21,7 +24,8 @@ class DataValidator:
         "pulp_flow_m3h": {"min": 0.0, "max": 2000.0},
         "consistency_pct": {"min": 0.0, "max": 10.0},
         "steam_pressure_bar": {"min": 0.0, "max": 15.0},
-        "machine_speed_mpm": {"min": 0.0, "max": 2500.0}
+        "machine_speed_mpm": {"min": 0.0, "max": 2500.0},
+        "basis_weight_gsm": {"min": 0.0, "max": 400.0}
     }
     
     def validate_schema(self, df: pd.DataFrame) -> Tuple[bool, List[str]]:
@@ -45,13 +49,18 @@ class DataValidator:
                 errors.append("Column 'timestamp' contains values that cannot be parsed as datetimes.")
                 
         # Verify numeric columns are float/int
-        numeric_cols = ["pulp_flow_m3h", "consistency_pct", "steam_pressure_bar", "machine_speed_mpm"]
+        numeric_cols = [
+            "pulp_flow_m3h", "consistency_pct", "steam_pressure_bar", 
+            "machine_speed_mpm", "basis_weight_gsm", "basis_weight_dev", 
+            "is_basis_weight_off_spec"
+        ]
         for col in numeric_cols:
             if col in df.columns:
                 if not pd.api.types.is_numeric_dtype(df[col]):
                     errors.append(f"Column '{col}' is not numeric. Type: {df[col].dtype}")
                     
         return len(errors) == 0, errors
+
         
     def validate_logical_boundaries(self, df: pd.DataFrame) -> Tuple[bool, List[str]]:
         """Checks for values exceeding absolute physical limitations (e.g. negative speeds)."""

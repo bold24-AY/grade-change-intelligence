@@ -19,8 +19,12 @@ def sample_raw_dataframe():
         "consistency_pct": [3.4, 3.5, np.nan, 3.3, 3.4],        # NaN
         "steam_pressure_bar": [4.2, 4.3, 4.2, 4.1, 4.2],
         "machine_speed_mpm": [850.0, 850.0, -120.0, 848.0, 850.0],  # Outlier (negative speed)
+        "basis_weight_gsm": [80.0, 80.5, 79.5, 80.2, 80.1],
+        "basis_weight_dev": [0.0, 0.5, -0.5, 0.2, 0.1],
+        "is_basis_weight_off_spec": [0, 0, 0, 0, 0],
         "active_grade_id": ["GRADE_A", "GRADE_A", "GRADE_A", "GRADE_B", "GRADE_B"]
     })
+
 
 def test_loader_csv_parsing(tmp_path, sample_raw_dataframe):
     """Verify that DataLoader can parse CSV files."""
