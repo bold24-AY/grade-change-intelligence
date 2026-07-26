@@ -34,6 +34,15 @@ class PredictionService(BaseService):
         }
         features_df = pd.DataFrame(features_dict)
         
+        # Align features if the underlying model is trained on engineered feature store
+        feature_names = getattr(self.ml_model, "feature_names", None)
+        if feature_names:
+            for col in feature_names:
+                if col not in features_df.columns:
+                    features_df[col] = 0.0
+            features_df = features_df[feature_names]
+
+        
         # Invoke model methods
         prediction = self.ml_model.predict(features_df)
         probabilities = self.ml_model.predict_proba(features_df)

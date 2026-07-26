@@ -7,10 +7,27 @@ router = APIRouter()
 
 # Simple Dependency Injection Provider
 def get_prediction_service() -> PredictionService:
-    # In a real system, we load the model from settings path or a model registry
-    model = GradeTransitionModel()
-    model.fit(None, None)  # Pre-fit mock model
+    from backend.app.ml.registry import ModelRegistry
+    import os
+    import pandas as pd
+    
+    registry_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "models", "checkpoints")
+    registry = ModelRegistry(registry_dir=registry_dir)
+    try:
+        model = registry.load_model("basis_weight_deviation_champion")
+    except Exception:
+        # Fallback Mock Model
+        from backend.app.ml.random_forest import RandomForestWrapper
+        model = RandomForestWrapper()
+        model.fit(pd.DataFrame({
+            "pulp_flow_m3h": [0.0, 1.0], 
+            "consistency_pct": [0.0, 1.0], 
+            "steam_pressure_bar": [0.0, 1.0], 
+            "machine_speed_mpm": [0.0, 1.0]
+        }), [0, 1])
+        
     return PredictionService(ml_model=model)
+
 
 @router.post("/predict", response_model=PredictionResponse)
 def predict_grade_change(

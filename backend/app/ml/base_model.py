@@ -1,7 +1,10 @@
-from abc import ABC, abstractmethod
 from typing import Any, Dict
+from abc import abstractmethod
+from backend.app.models.base import BaseMLModel
 
-class BaseMLClassifier(ABC):
+
+class BaseMLClassifier(BaseMLModel):
+
     """
     Abstract Base Class for Machine Learning Classifiers.
     Establishes the interface for Random Forest, XGBoost, CatBoost, and LightGBM.
