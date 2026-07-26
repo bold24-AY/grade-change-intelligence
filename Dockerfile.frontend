@@ -1,0 +1,20 @@
+# Stage 1: Build React App
+FROM node:20-slim AS build
+
+WORKDIR /app/frontend
+
+COPY frontend/package.json frontend/package-lock.json* /app/frontend/
+RUN npm ci
+
+COPY frontend/ /app/frontend/
+RUN npm run build
+
+# Stage 2: Serve React App using Nginx
+FROM nginx:alpine
+
+COPY --from=build /app/frontend/dist /usr/share/nginx/html
+# Copy custom nginx configuration if needed, or use default
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

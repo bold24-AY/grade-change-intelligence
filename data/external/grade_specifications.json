@@ -1,0 +1,26 @@
+{
+  "GRADE_A": {
+    "name": "Standard Copier Paper 80gsm",
+    "target_basis_weight_gsm": 80.0,
+    "tolerance_basis_weight_gsm": 1.5,
+    "target_moisture_pct": 5.5,
+    "tolerance_moisture_pct": 0.3,
+    "nominal_machine_speed_mpm": 850.0
+  },
+  "GRADE_B": {
+    "name": "Premium Heavyweight Cardstock 120gsm",
+    "target_basis_weight_gsm": 120.0,
+    "tolerance_basis_weight_gsm": 2.0,
+    "target_moisture_pct": 6.2,
+    "tolerance_moisture_pct": 0.4,
+    "nominal_machine_speed_mpm": 750.0
+  },
+  "GRADE_C": {
+    "name": "Lightweight Newsprint 45gsm",
+    "target_basis_weight_gsm": 45.0,
+    "tolerance_basis_weight_gsm": 1.0,
+    "target_moisture_pct": 8.0,
+    "tolerance_moisture_pct": 0.5,
+    "nominal_machine_speed_mpm": 1100.0
+  }
+}
