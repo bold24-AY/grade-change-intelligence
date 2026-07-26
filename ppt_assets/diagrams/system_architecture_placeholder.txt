@@ -1,4 +1,0 @@
-Place PPT assets here, such as SVG diagrams, UI mockups, or PNG flowcharts showing:
-1. Paper Machine schematic (Pulp -> Wire -> Press -> Dryers -> Reel).
-2. Data flow from DCS (Distributed Control System) to Grade Change Model.
-3. System Architecture block diagrams.

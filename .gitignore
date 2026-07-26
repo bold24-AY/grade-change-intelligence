@@ -69,7 +69,13 @@ data/raw/*
 !data/raw/sensor_readings_sample.csv
 data/processed/*
 !data/processed/engineered_features_sample.csv
+data/processed/operator_decisions.csv
 data/external/*
 !data/external/grade_specifications.json
 logs/
 *.log
+
+# Training logs & PPT assets
+catboost_info/
+ppt_assets/
+
