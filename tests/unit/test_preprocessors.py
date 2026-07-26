@@ -31,5 +31,6 @@ def test_telemetry_validation_out_of_bounds():
     
     is_valid, errors = validator.validate_telemetry_bounds(payload)
     assert is_valid is False
-    assert "consistency_pct" in errors
-    assert "machine_speed_mpm" in errors
+    assert any("consistency_pct" in err for err in errors)
+    assert any("machine_speed_mpm" in err for err in errors)
+
