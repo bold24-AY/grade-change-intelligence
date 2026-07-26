@@ -12,13 +12,30 @@ GCI minimizes paper waste ("broke") and off-spec downtime by providing real-time
 
 ---
 
-## 📺 Control Room Dashboard Layout
+## 📺 Control Room Dashboard Screens
 
-To run and capture screenshots/demo GIFs of the live operator command center:
-1.  **Overview Page**: Displays active telemetry cards (Pulp Flow, Consistency, Speed) alongside color-coded spec alarm indicator panels (`🚨 ALARM: OFF SPEC` vs `🟢 ON SPECIFICATION`).
-2.  **Prediction / Risk Page**: Features a Plotly gauge showing real-time off-spec probability and horizontal bar charts mapping SHAP driver attributions.
-3.  **Analytics Page**: Displays trend graphs showing continuous sensor logs split dynamically with red dashed lines representing **Projected Deviation Trajectories** if deviations persist.
-4.  **Recommendations Page**: Highlights suggested stock flow, speed, and steam pressure adjustments. Every delta card lists its **Inference Source** (e.g., physics loops, nearest-neighbors match), and features interactive **Accept** / **Reject** controls that log actions in a CSV database.
+Here are screenshots of the live operator command center:
+
+### 1. Machinery Process Overview
+Displays active telemetry cards (Pulp Flow, Consistency, Speed) alongside color-coded spec alarm indicator panels (`🚨 ALARM: OFF SPEC` vs `🟢 ON SPECIFICATION`).
+![Machinery Process Overview](docs/images/overview.png)
+
+### 2. Predictive Quality & Risk Meter
+Features a Plotly gauge showing real-time off-spec probability and horizontal bar charts mapping SHAP driver attributions.
+![Predictive Quality & Risk Meter](docs/images/prediction.png)
+
+### 3. Active AI Controller Recommendations
+Highlights suggested stock flow, speed, and steam pressure adjustments. Every delta card lists its **Inference Source** (e.g., physics loops, nearest-neighbors match), and features interactive **Accept** / **Reject** controls.
+![Active AI Controller Recommendations](docs/images/recommendations.png)
+
+### 4. Machine Process Analytics
+Displays trend graphs showing continuous sensor logs split dynamically with red dashed lines representing **Projected Deviation Trajectories** if deviations persist.
+![Machine Process Analytics](docs/images/analytics.png)
+
+### 5. Nearest-Neighbor Historical Evidence
+Provides matched historical runs operating successfully under similar process telemetry envelopes.
+![Nearest-Neighbor Historical Evidence](docs/images/history.png)
+
 
 ---
 
