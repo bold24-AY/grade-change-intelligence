@@ -1,12 +1,12 @@
 # Grade Change Intelligence (GCI) 🏭
 
-[![SIH Theme](https://img.shields.io/badge/SIH%20Theme-Smart%20Automation-blueviolet?style=for-the-badge)](https://www.sih.gov.in/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit)](https://streamlit.io/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 An enterprise-ready, modular decision-support system designed to monitor, predict, and optimize paper machine grade change transitions. Grade transitions are transient phases where a paper machine switches from manufacturing one grade specification (e.g., standard 80gsm copy paper) to another (e.g., heavyweight 120gsm cardstock). 
+
 
 GCI minimizes paper waste ("broke") and off-spec downtime by providing real-time telemetry analytics, machine learning model selection, explainable AI (SHAP attributions), and an interactive control room setpoint optimizer.
 

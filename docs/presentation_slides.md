@@ -1,23 +1,21 @@
-# Smart India Hackathon (SIH) - Presentation Slide Deck
+# Master Project Presentation Slide Deck
 
-This document provides the exact text, image guidelines, and research references for your **Grade Change Intelligence in Paper Making Process** slides, following the official SIH idea submission template.
+This document provides the exact text, image guidelines, and research references for your **Grade Change Intelligence in Paper Making Process** slides, following a professional corporate and academic presentation layout.
 
 ---
 
 ## 🛝 Slide 1: TITLE PAGE
 
 ### Slide Content:
-- **Problem Statement ID**: SIH-1628 *(Use your official portal ID)*
-- **Problem Statement Title**: Grade Change Intelligence in Paper Making Process
-- **Theme**: Smart Automation / Industry 4.0 / Advanced Manufacturing
-- **PS Category**: Software
-- **Team Name**: *[Insert Team Name]*
-- **Student Name (Registered on portal)**: *[Insert Name]*
-- **Student ID**: *[Insert ID]*
+- **Project Title**: Grade Change Intelligence in Paper Making Process
+- **Subtitle**: Real-time Predictive Analytics, Explainable AI & Actuator Setpoint Optimizer
+- **Authors / Presenters**: *[Insert Team Member Names]*
+- **Affiliation**: *[Insert Department/Company Name]*
+- **Core Themes**: Industry 4.0, Soft Sensors, Process Automation & Control Systems
 
 ### 🖼 Image / Visual Suggestions:
-- **Branding**: Smart India Hackathon official logo in the top right corner.
 - **Background Graphic**: Sleek industrial background showing a rolling paper mill or digital twin automation loop.
+
 - **Image Prompt (for DALL-E / Midjourney)**:
   > *Industrial digital twin dashboard displaying real-time metrics for a continuous paper mill machinery, high-tech control room, sleek dark blue neon accents, professional 8k resolution.*
 

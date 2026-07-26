@@ -1,6 +1,7 @@
-# Smart India Hackathon (SIH) - Presentation Assets Catalog
+# Project Presentation Assets Catalog
 
 This document catalog contains every diagram required for the Grade Change Intelligence presentation slides, rendered using **Mermaid** and standalone vector **SVG** wireframes.
+
 
 ---
 
