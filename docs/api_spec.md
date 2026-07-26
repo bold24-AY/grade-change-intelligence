@@ -7,7 +7,7 @@ This document details the REST API endpoints available in the Grade Change Intel
 
 ---
 
-## 1. Prediction Endpoints
+## 1. Prediction & Inference Endpoints
 
 ### `POST /prediction/predict`
 Executes real-time inference on a frame of paper machine sensor telemetry to determine if a grade transition is occurring.
@@ -36,7 +36,99 @@ Executes real-time inference on a frame of paper machine sensor telemetry to det
 
 ---
 
-## 2. Monitoring Endpoints
+## 2. Recommendation Endpoints
+
+### `POST /prediction/recommend`
+Generates real-time controller setpoint delta recommendations to stabilize deviations.
+
+#### Request Body
+```json
+{
+  "telemetry": {
+    "pulp_flow_m3h": 450.0,
+    "consistency_pct": 3.4,
+    "steam_pressure_bar": 4.2,
+    "machine_speed_mpm": 850.0,
+    "basis_weight_gsm": 82.0,
+    "active_grade_id": "GRADE_A"
+  },
+  "prediction": {
+    "is_basis_weight_off_spec": true,
+    "confidence_score": 0.88,
+    "basis_weight_dev": 2.0
+  }
+}
+```
+
+#### Response Body (200 OK)
+```json
+{
+  "active_grade_id": "GRADE_A",
+  "adjustments": {
+    "stock_flow_m3h_delta": -11.0,
+    "filler_flow_lmin_delta": -4.0,
+    "steam_pressure_bar_delta": 0.8,
+    "machine_speed_mpm_delta": -4.2
+  },
+  "explanation": {
+    "why": "The scanner measures a basis weight deviation of +2.00 gsm. To correct this, we recommend to reduce stock flow by -11.00 m3/h.",
+    "confidence": 0.92,
+    "historical_evidence": [
+      {
+        "timestamp": "2026-07-25T14:32:00Z",
+        "pulp_flow_m3h": 448.0,
+        "machine_speed_mpm": 845.0,
+        "similarity_score": 0.9412
+      }
+    ],
+    "operator_notes": "For standard 80gsm copy paper, prioritize pulp flow consistency checks. Maintain speed above 800mpm."
+  }
+}
+```
+
+---
+
+## 3. Explainable AI (XAI) Endpoints
+
+### `POST /prediction/explain`
+Calculates SHAP feature attributions and operator text summaries explaining the predictions.
+
+#### Request Body
+```json
+{
+  "pulp_flow_m3h": 480.0,
+  "machine_speed_mpm": 850.0
+}
+```
+
+#### Response Body (200 OK)
+```json
+{
+  "risk_percentage": 85.0,
+  "why_nlp": "The system indicates a HIGH off-spec deviation risk (85.0% probability). The primary driver is Thick Stock Pulp Flow (measured at 480.0), contributing to 88.0% of the model's decision path.",
+  "influential_variables": [
+    {
+      "variable_name": "Thick Stock Pulp Flow",
+      "value": 480.0,
+      "shap_value": 2.5,
+      "percentage_impact": 88.0,
+      "direction": "INCREASE"
+    }
+  ],
+  "historical_references": [
+    {
+      "timestamp": "2026-07-25T14:32:00Z",
+      "description": "Similar high pulp flow event resolved by stock valve step change (-8 m³/h).",
+      "similarity": 0.9412
+    }
+  ],
+  "confidence_score": 0.85
+}
+```
+
+---
+
+## 4. Monitoring Endpoints
 
 ### `GET /monitoring/health`
 Checks backend and pipeline services health.
@@ -50,22 +142,4 @@ Checks backend and pipeline services health.
   "uptime_seconds": 12450
 }
 ```
-
-### `GET /monitoring/specs`
-Retrieves current target specifications for all paper grades.
-
-#### Response Body (200 OK)
-```json
-{
-  "GRADE_A": {
-    "name": "Standard Copier Paper 80gsm",
-    "target_basis_weight_gsm": 80.0,
-    "target_moisture_pct": 5.5
-  },
-  "GRADE_B": {
-    "name": "Premium Heavyweight Cardstock 120gsm",
-    "target_basis_weight_gsm": 120.0,
-    "target_moisture_pct": 6.2
-  }
-}
-```
+Standard JSON responses are structured using FastAPI models.

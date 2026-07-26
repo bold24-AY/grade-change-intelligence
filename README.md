@@ -2,7 +2,7 @@
 
 An enterprise-ready, modular decision-support system designed to monitor, predict, and optimize paper grade change transitions. Grade transitions are continuous process phases where a paper machine switches from manufacturing one grade specification (e.g., standard 80gsm paper) to another (e.g., heavyweight 120gsm cardstock).
 
-This system provides real-time sensor analytics, anomaly boundaries check, and machine learning models to detect transition status, forecast target values alignment, and minimize paper waste ("broke").
+This system provides real-time sensor analytics, anomaly boundaries checks, machine learning model comparisons (Random Forest, XGBoost, LightGBM, CatBoost), explainable AI (SHAP attributions), and an operator advice controller dashboard to minimize paper waste ("broke").
 
 ---
 
@@ -10,17 +10,18 @@ This system provides real-time sensor analytics, anomaly boundaries check, and m
 
 Every folder in this repository has a clear, isolated purpose supporting maintainability and team scaling:
 
-- **`backend/`**: Contains the FastAPI REST microservice. It handles telemetry parsing, validation checks, and hosts ML model inference.
-- **`frontend/`**: Contains the React + Vite single-page application. Features interactive dashboard sliders to simulate DCS telemetry, real-time charts, and alarm indicators.
-- **`data/`**: Structured data directories:
-  - `raw/`: Unmodified sensor telemetry CSV captures.
-  - `processed/`: Processed datasets with rolling features and transition targets.
-  - `external/`: External specs (JSON catalog) defining tolerances for basis weight and moisture targets.
+- **`backend/`**: Contains the FastAPI REST microservice and model inference services.
+  - `app/pipeline/`: Decoupled ingestion loader, cleaner, rolling feature engineer, scaler, validator, and data versioner.
+  - `app/ml/`: Modular ML wrappers (RandomForest, XGBoost, LightGBM, CatBoost), trainer comparative engine, and checkpoint registry.
+  - `app/recommendation/`: Control rules engine and historical nearest-neighbor similarity matcher.
+  - `app/xai/`: SHAP attribution values engine and NLP operator report generator.
+- **`frontend/`**: Contains the React/Vite SPA and the Streamlit dashboard command center client (`app.py`).
+- **`data/`**: Structured data directories (`raw/`, `processed/`, `external/`).
 - **`docs/`**: Production documentation for developers, field engineers, and system operators.
-- **`research/`**: Workspace for data science experimentation. Includes notebooks for exploratory data analysis (EDA) and transition literature notes.
-- **`ppt_assets/`**: Slide structures, diagrams, and pitching assets for presentation demos.
-- **`scripts/`**: Automation scripts to bootstrap dev environments and run engineering data pipelines.
-- **`tests/`**: Automated verification framework containing isolated unit and integration test sweeps.
+- **`research/`**: Workspace for data science experimentation, literature review, and references.
+- **`ppt_assets/`**: Presentation slides structures andPitch assets.
+- **`scripts/`**: Automation scripts to run data pipelines and ML training cycles.
+- **`tests/`**: Automated verification framework containing unit and integration tests.
 
 ---
 
@@ -28,53 +29,56 @@ Every folder in this repository has a clear, isolated purpose supporting maintai
 
 We structure the backend and data services around the five core SOLID software engineering principles:
 
-1. **Single Responsibility Principle (SRP)**: Modules are split by logical concern. Telemetry checks exist in [validation_service.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/services/validation_service.py), machine learning scoring in [prediction_service.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/services/prediction_service.py), and config loading in [config.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/core/config.py).
-2. **Open/Closed Principle (OCP)**: The model runner is built around [base.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/models/base.py)'s `BaseMLModel` abstract class. New models (XGBoost, LSTMs, Neural Nets) can be plugged in without refactoring the prediction service or endpoint layers.
-3. **Liskov Substitution Principle (LSP)**: All classifiers implementing the `BaseMLModel` contract can be injected interchangeably into the prediction orchestration logic.
-4. **Interface Segregation Principle (ISP)**: API endpoints are modularized by concern ([prediction.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/api/v1/endpoints/prediction.py) vs [monitoring.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/api/v1/endpoints/monitoring.py)). Clients only load the interfaces they require.
-5. **Dependency Inversion Principle (DIP)**: Top-level API router handlers depend on abstract service definitions. Real concrete instances are resolved dynamically during runtime via dependency injection.
+1.  **Single Responsibility Principle (SRP)**: Modules are split by logical concern. Telemetry checks exist in [validation_service.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/services/validation_service.py), machine learning scoring in [prediction_service.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/services/prediction_service.py), and config loading in [config.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/core/config.py).
+2.  **Open/Closed Principle (OCP)**: The model runner is built around [base_model.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/ml/base_model.py)'s `BaseMLClassifier` abstract class. New models (LSTMs, PyTorch neural networks) can be plugged in without refactoring the prediction service or endpoint layers.
+3.  **Liskov Substitution Principle (LSP)**: All classifiers implementing the `BaseMLClassifier` contract can be injected interchangeably into the prediction orchestration logic.
+4.  **Interface Segregation Principle (ISP)**: API endpoints are modularized by concern ([prediction.py](file:///C:/Users/itsay/.gemini/antigravity/scratch/grade-change-intelligence/backend/app/api/v1/endpoints/prediction.py)). Clients only load the interfaces they require.
+5.  **Dependency Inversion Principle (DIP)**: Top-level API router handlers depend on abstract service definitions. Real concrete instances are resolved dynamically during runtime via dependency injection.
 
 ---
 
 ## 🚀 Running the System
 
-### Docker Compose (Recommended)
-Boot up both backend and frontend inside isolated Docker containers:
-```bash
-docker-compose up --build
-```
-- **Backend API**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Frontend Dashboard**: [http://localhost:3000](http://localhost:3000)
+### Local Dev Setup (Windows)
 
-### Local Dev Setup
-
-#### 1. Backend (Python/FastAPI)
-Initialize virtual environment and install requirements:
+#### 1. Setup Environment
+Initialize virtual environment and install dependencies:
 ```cmd
-# Navigate to scripts directory and run setup
+# Execute environment setup batch script
 .\scripts\setup_env.bat
-
-# Activate environment and start development server
-venv\Scripts\activate
-uvicorn backend.app.main:app --reload --port 8000
 ```
 
-#### 2. Frontend (React/Vite)
-Install NPM modules and run Vite:
-```bash
-cd frontend
-npm install
-npm run dev
+#### 2. Run Data Pipeline & Train ML Models
+Generate synthetic telemetry logs, engineer rolling features, train all candidate models, and select the champion:
+```cmd
+# Run data loader, cleaner and versioner
+venv\Scripts\python scripts/run_pipeline.py
+
+# Train Random Forest, XGBoost, LightGBM, CatBoost and select champion
+venv\Scripts\python scripts/train_pipeline.py
 ```
+
+#### 3. Launch Streamlit Dashboard Client
+Start the industrial-grade dark mode dashboard:
+```cmd
+venv\Scripts\streamlit run frontend/app.py
+```
+Open [http://localhost:8501](http://localhost:8501) in your browser.
+
+#### 4. Launch FastAPI REST Server
+Start the backend web server:
+```cmd
+venv\Scripts\python -m uvicorn backend.app.main:app --reload --port 8000
+```
+API Documentation will be available at [http://localhost:8000/docs](http://localhost:8000/docs).
 
 ---
 
 ## 🧪 Testing and Verification
 
-Verify that endpoints, configurations, and preprocessing computations execute successfully:
+Verify that endpoints, configurations, preprocessing, ML models, recommendations, and XAI calculations execute successfully:
 
-```bash
-# Ensure virtualenv is active
-pytest
+```cmd
+venv\Scripts\python -m pytest
 ```
-Tests will execute unit checks on configs and sensors bounds, and run integration calls on health/prediction routes.
+Tests will execute unit checks on configs, sensors bounds, and run integration calls on health, prediction, recommendation, and explanation routes.
