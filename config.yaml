@@ -32,3 +32,19 @@ model:
     n_estimators: 100
     max_depth: 10
     random_state: 42
+
+recommendation:
+  gains:
+    stock_flow_per_gsm_dev: -5.5
+    filler_flow_per_gsm_dev: -2.0
+    steam_pressure_per_moisture_dev: 0.4
+    speed_adjustment_gain: 0.05
+  limits:
+    max_stock_flow_change_pct: 10.0
+    max_filler_flow_change_pct: 15.0
+    max_steam_pressure_change_bar: 1.5
+    max_speed_change_mpm: 50.0
+  historical_match:
+    top_k: 3
+    similarity_threshold: 0.8
+

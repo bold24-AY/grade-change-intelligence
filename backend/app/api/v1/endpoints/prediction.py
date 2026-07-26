@@ -28,3 +28,28 @@ def predict_grade_change(
             status_code=500,
             detail=f"Inference error during grade change prediction: {str(e)}"
         )
+
+from backend.app.recommendation.schema import ProcessTelemetryInput, PredictionInput, RecommendationOutput
+from backend.app.recommendation.engine import RecommendationEngine
+
+def get_recommendation_engine() -> RecommendationEngine:
+    return RecommendationEngine()
+
+@router.post("/recommend", response_model=RecommendationOutput)
+def generate_recommendation(
+    telemetry: ProcessTelemetryInput,
+    prediction: PredictionInput,
+    engine: RecommendationEngine = Depends(get_recommendation_engine)
+) -> RecommendationOutput:
+    """
+    Generate real-time controller setpoint adjustments and physical explanations.
+    """
+    try:
+        response = engine.generate_recommendation(telemetry, prediction)
+        return response
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate setpoint recommendations: {str(e)}"
+        )
+
